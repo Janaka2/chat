@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { User } from '../interfaces/user';
 import { Alert } from './../classes/alert';
 import { AlertService } from './alert.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable,from } from 'rxjs';
 import { AlertType } from './../enums/alert-type.enum';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   public signup(firstName: string, lastName: string, email: string, password: string): Observable<boolean> {
-    return Observable.fromPromise(
+    return from(
       this.afAuth.auth.createUserWithEmailAndPassword(email, password)
         .then((user) => {
           const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${user.uid}`);
@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   public login(email: string, password: string): Observable<boolean> {
-    return Observable.fromPromise(
+    return from(
       this.afAuth.auth.signInWithEmailAndPassword(email, password)
         .then((user) => true)
         .catch((err) => false)
